@@ -1,20 +1,26 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { coffeeList } from "@/types";
+import { nonCoffeeList } from "@/types";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { useAddToCartStore } from "@/stores/add_to_cart_store";
-const CoffeeList = () => {
+const NonCoffeeList = () => {
   const { addToCartItem, items } = useAddToCartStore();
+
   return (
     <div className="flex flex-col p-5">
       <div className="flex flex-row items-end content-end gap-2 mb-5">
-        <Image alt="" src={"/menu_images/coffee.png"} width={50} height={50} />
-        <h1 className="text-3xl font-bold">COFFEE</h1>
+        <Image
+          alt=""
+          src={"/menu_images/non-coffee.png"}
+          width={50}
+          height={50}
+        />
+        <h1 className="text-3xl font-bold">NON-COFFEE</h1>
       </div>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-        {coffeeList.map((coffee, i) => {
+        {nonCoffeeList.map((coffee, i) => {
           const isAvailable = coffee.quantity > 1;
           const isAddedToCart = items.some(
             (e) => e.id === coffee.id && e.category === coffee.category,
@@ -65,4 +71,4 @@ const CoffeeList = () => {
   );
 };
 
-export default CoffeeList;
+export default NonCoffeeList;

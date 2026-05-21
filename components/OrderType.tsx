@@ -29,20 +29,20 @@ const OrderType = () => {
             <Button
               onClick={() => selectType(data.id)}
               className={cn(
-                `flex w-25  flex-col h-25 rounded-xl mb-5 bg-[#EEEEEE] shadow-md inset-shadow-sm cursor-pointer`,
+                `flex w-20  flex-col h-20 rounded-xl mb-5 bg-[#EEEEEE] shadow-md inset-shadow-sm cursor-pointer`,
                 type === data.id ? "inset-shadow-[#DD9E59] bg-[#A47251]" : "",
               )}
             >
               <Image
                 alt={data.description}
                 src={data.icon}
-                width={70}
-                height={70}
+                width={40}
+                height={40}
                 loading="eager"
               />
               <p
                 className={cn(
-                  "text-lg text-black font-bold",
+                  "text-xs text-black font-bold",
                   type === data.id && "text-white",
                 )}
               >

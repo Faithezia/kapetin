@@ -13,9 +13,9 @@ interface CartItem {
 interface AddToCartState {
   items: CartItem[];
 
-  addToCartItem: (newItem: CartItem) => void;
-  addQuantity: (itemToUpdate: number) => void;
-  minusQuantity: (itemToUpdate: number) => void;
+  addToCartItem: (newItem: CartItem, category: string) => void;
+  addQuantity: (itemToUpdate: number, category: string) => void;
+  minusQuantity: (itemToUpdate: number, category: string) => void;
 }
 interface OrderTypeState {
   type: number;
@@ -28,12 +28,10 @@ export const useAddToCartStore = create<AddToCartState>()(
       (set) => ({
         items: [],
 
-        addToCartItem: (newItem) =>
+        addToCartItem: (newItem, category) =>
           set((state) => {
-            useAddToCartStore.persist.clearStorage();
-
             const existingItem = state.items.find(
-              (item) => item.id === newItem.id,
+              (item) => item.id === newItem.id && category === item.category,
             );
             if (existingItem) {
               return {
@@ -56,19 +54,19 @@ export const useAddToCartStore = create<AddToCartState>()(
             };
           }),
 
-        addQuantity: (itemToUpdate) =>
+        addQuantity: (itemToUpdate, category) =>
           set((state) => ({
             items: state.items.map((item) =>
-              item.id === itemToUpdate
+              item.id === itemToUpdate && item.category === category
                 ? { ...item, quantity: item.quantity + 1 }
                 : item,
             ),
           })),
 
-        minusQuantity: (itemToUpdate) =>
+        minusQuantity: (itemToUpdate, category) =>
           set((state) => ({
             items: state.items.map((item) =>
-              item.id === itemToUpdate
+              item.id === itemToUpdate && item.category === category
                 ? {
                     ...item,
                     quantity: Math.max(1, item.quantity - 1),
@@ -78,7 +76,7 @@ export const useAddToCartStore = create<AddToCartState>()(
           })),
       }),
       {
-        name: "cart-storage",
+        name: "cart-data",
       },
     ),
   ),

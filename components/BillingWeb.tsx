@@ -1,9 +1,6 @@
 import { useAddToCartStore } from "@/stores/add_to_cart_store";
-import { coffeeList } from "@/types";
 import Image from "next/image";
-import React, { useEffect, useMemo } from "react";
 import { Button } from "./ui/button";
-import { MinusIcon } from "lucide-react";
 import OrderTotal from "./OrderTotal";
 import OrderType from "./OrderType";
 import PaymentType from "./PaymentType";
@@ -15,12 +12,12 @@ const BillingWeb = () => {
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
-
+  const arrangeItems = items.toReversed();
   return (
-    <div className="p-5 h-screen flex flex-col ">
+    <div className="p-5 h-screen flex flex-col fixed overflow-auto">
       <h1 className="text-2xl font-bold mb-4">BILLING</h1>
       <div className="flex-1 overflow-y-auto max-h-100">
-        {items.map((item, i) => {
+        {arrangeItems.map((item, i) => {
           const totalPrice = item.price * item.quantity;
           return (
             <div className="w-full h-30 border-2 my-3 rounded-3xl p-2" key={i}>
@@ -31,7 +28,7 @@ const BillingWeb = () => {
                     src={item.imageSrc}
                     fill
                     className="object-cover rounded-2xl"
-                    sizes="100vw"
+                    sizes="100%"
                     loading="eager"
                   />
                 </div>
@@ -44,14 +41,23 @@ const BillingWeb = () => {
                     <div className="w-20 flex justify-between items-center">
                       <Button
                         className="bg-[#A47251]"
-                        onClick={() => minusQuantity(item.id)}
+                        onClick={() => {
+                          const index = items.findIndex(
+                            (e) =>
+                              e.id === item.id && e.category === item.category,
+                          );
+                          if (item.quantity === 1) {
+                            items.splice(index, 1);
+                          }
+                          minusQuantity(item.id, item.category);
+                        }}
                       >
                         -
                       </Button>
                       {item.quantity}
                       <Button
                         className="bg-[#A47251]"
-                        onClick={() => addQuantity(item.id)}
+                        onClick={() => addQuantity(item.id, item.category)}
                       >
                         +
                       </Button>
@@ -70,7 +76,9 @@ const BillingWeb = () => {
       <OrderTotal totalPrice={total} totalItems={items.length} />
       <OrderType />
       <PaymentType />
-      <Button className="w-full h-15 bg-[#A47251] cursor-pointer font-bold ">Process Transaction</Button>
+      <Button className="w-full h-15 bg-[#A47251] cursor-pointer font-bold ">
+        Process Transaction
+      </Button>
     </div>
   );
 };

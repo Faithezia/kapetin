@@ -6,7 +6,6 @@ type Props = {
 };
 
 const OrderTotal = ({ totalPrice, totalItems }: Props) => {
-  console.log(totalPrice);
   return (
     <div className="px-3">
       <hr className="border-t-2 border-dotted border-gray-400" />

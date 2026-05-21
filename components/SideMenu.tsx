@@ -18,7 +18,13 @@ const SideMenu = () => {
     <div>
       <Sidebar>
         <SidebarHeader className="flex justify-center items-center">
-          <Image alt="logo" src={"/logo_1.png"} width={300} height={300} />
+          <Image
+            alt="logo"
+            src={"/logo_1.png"}
+            width={300}
+            height={300}
+            loading="eager"
+          />
         </SidebarHeader>
         <SidebarContent className="p-7">
           <SidebarGroup>
