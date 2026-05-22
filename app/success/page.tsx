@@ -1,3 +1,4 @@
+"use client";
 // app/success/page.tsx
 import { stripe } from "@/lib/stripe";
 import { useAddToCartStore } from "@/stores/add_to_cart_store";
