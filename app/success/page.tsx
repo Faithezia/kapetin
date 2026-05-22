@@ -60,13 +60,13 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               {item.description} × {item.quantity}
             </span>
             <span className="font-medium">
-              ${((item.amount_total ?? 0) / 100).toFixed(2)}
+              ₱{((item.amount_total ?? 0) / 100).toFixed(2)}
             </span>
           </div>
         ))}
         <div className="border-t mt-3 pt-3 flex justify-between font-bold">
           <span>Total</span>
-          <span>${amountTotal.toFixed(2)}</span>
+          <span>₱{amountTotal.toFixed(2)}</span>
         </div>
       </div>
       <Link
