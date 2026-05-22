@@ -12,7 +12,7 @@ import { useMenuState } from "@/stores/menu_selection_store";
 export default function Home() {
   const { menu } = useMenuState();
   const mobile = useIsMobile();
-  return (
+  return ( 
     <div className="flex flex-col flex-1">
       <div className="grid grid-cols-12">
         <div className="col-span-12 lg:col-span-9">
