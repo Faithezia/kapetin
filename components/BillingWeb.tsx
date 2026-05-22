@@ -4,15 +4,42 @@ import { Button } from "./ui/button";
 import OrderTotal from "./OrderTotal";
 import OrderType from "./OrderType";
 import PaymentType from "./PaymentType";
+import { useState } from "react";
+import { CheckoutSessionResponse } from "@/types";
 
 const BillingWeb = () => {
   const { items, addQuantity, minusQuantity } = useAddToCartStore();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const total = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
   const arrangeItems = items.toReversed();
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      });
+
+      if (!res.ok) throw new Error("Failed to create checkout session");
+
+      const { url }: CheckoutSessionResponse = await res.json();
+      if (url) window.location.href = url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <div className="p-5 h-screen flex flex-col fixed overflow-auto">
       <h1 className="text-2xl font-bold mb-4">BILLING</h1>
@@ -76,8 +103,13 @@ const BillingWeb = () => {
       <OrderTotal totalPrice={total} totalItems={items.length} />
       <OrderType />
       <PaymentType />
-      <Button className="w-full h-15 bg-[#A47251] cursor-pointer font-bold ">
-        Process Transaction
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <Button
+        className="w-full h-15 bg-[#A47251] cursor-pointer font-bold "
+        disabled={loading}
+        onClick={handleCheckout}
+      >
+        {loading ? "Redirecting..." : "Checkout"}
       </Button>
     </div>
   );

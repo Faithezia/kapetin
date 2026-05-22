@@ -356,3 +356,7 @@ export const sandwichList = [
     category: "sandwich",
   },
 ];
+
+export interface CheckoutSessionResponse {
+  url: string;
+}
