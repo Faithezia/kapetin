@@ -1,6 +1,8 @@
 // app/success/page.tsx
 import { stripe } from "@/lib/stripe";
+import { useAddToCartStore } from "@/stores/add_to_cart_store";
 import Link from "next/link";
+import { useEffect } from "react";
 
 interface SuccessPageProps {
   searchParams: Promise<{ session_id?: string }>;
@@ -8,7 +10,7 @@ interface SuccessPageProps {
 
 export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const { session_id } = await searchParams;
-
+  const { resetCart } = useAddToCartStore();
   if (!session_id) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -28,6 +30,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const amountTotal = (session.amount_total ?? 0) / 100;
   const customerEmail = session.customer_details?.email ?? "";
   const customerName = session.customer_details?.name ?? "";
+  resetCart();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-6 text-center">
@@ -56,7 +59,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
       {/* Order summary */}
       <div className="w-full max-w-sm border-2 rounded-3xl p-4 mb-6 text-left">
         <h2 className="font-bold text-lg mb-3">Order Summary</h2>
-        {items.map((item) => (
+        {items.map((item: any) => (
           <div key={item.id} className="flex justify-between py-1 text-sm">
             <span>
               {item.description} × {item.quantity}
