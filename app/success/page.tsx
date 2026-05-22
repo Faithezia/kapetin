@@ -1,7 +1,6 @@
-"use client";
 // app/success/page.tsx
+import CartResetter from "@/components/CartReset";
 import { stripe } from "@/lib/stripe";
-import { useAddToCartStore } from "@/stores/add_to_cart_store";
 import Link from "next/link";
 
 interface SuccessPageProps {
@@ -10,7 +9,7 @@ interface SuccessPageProps {
 
 export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const { session_id } = await searchParams;
-  const { resetCart } = useAddToCartStore();
+
   if (!session_id) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -30,11 +29,10 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const amountTotal = (session.amount_total ?? 0) / 100;
   const customerEmail = session.customer_details?.email ?? "";
   const customerName = session.customer_details?.name ?? "";
-  resetCart();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-6 text-center">
-      {/* Checkmark */}
+      <CartResetter />
       <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
         <svg
           className="w-10 h-10 text-green-500"
@@ -50,13 +48,10 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           />
         </svg>
       </div>
-
       <h1 className="text-3xl font-bold mb-2">Payment Successful!</h1>
       <p className="text-gray-500 mb-6">
         Thank you, {customerName}! A receipt was sent to {customerEmail}.
       </p>
-
-      {/* Order summary */}
       <div className="w-full max-w-sm border-2 rounded-3xl p-4 mb-6 text-left">
         <h2 className="font-bold text-lg mb-3">Order Summary</h2>
         {items.map((item: any) => (
@@ -74,7 +69,6 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           <span>${amountTotal.toFixed(2)}</span>
         </div>
       </div>
-
       <Link
         href="/"
         className="w-full max-w-sm bg-[#A47251] text-white font-bold py-3 rounded-xl text-center block"
